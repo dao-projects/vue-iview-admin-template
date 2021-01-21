@@ -1,5 +1,5 @@
 // 项目的打包输出目录
-// const outputDir = process.env.VUE_APP_OUTPUT_DIR;
+const CDN_Path = process.env.VUE_APP_CDN_PATH || "";
 //判断是否是生产环境
 const isPro = process.env.NODE_ENV === "production";
 //判断是否是开发环境
@@ -15,7 +15,13 @@ const cdn = {
   build: {
     // 由于自定义了部分样式（可能存在重复样式）
     // css: ["dll/iview.css"],
-    js: ["dll/vue.min.js", "dll/vue-router.min.js", "dll/vuex.min.js", "dll/axios.min.js", "dll/iview.min.js"]
+    js: [
+      `${CDN_Path}/vue.min.js`,
+      `${CDN_Path}/vue-router.min.js`,
+      `${CDN_Path}/vuex.min.js`,
+      `${CDN_Path}/axios.min.js`,
+      `${CDN_Path}/iview.min.js`
+    ]
   }
 };
 

@@ -5,7 +5,8 @@ import { getToken } from "@/utils/token";
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: process.env.BASE_URL, // url = base url + request url
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 });
@@ -44,18 +45,20 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data;
+    console.log(res);
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.code !== 200) {
       // Message({
       //   message: res.message || "Error",
       //   type: "error",
       //   duration: 5 * 1000
       // });
-      this.$Modal.error({
-        title: "响应错误提示",
-        content: res.message || "Error"
-      });
+      // this.$Modal.error({
+      //   title: "响应错误提示",
+      //   content: res.message || "Error"
+      // });
+      console.log("响应错误提示:", res.message || "Error");
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {

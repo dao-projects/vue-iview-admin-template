@@ -5,9 +5,22 @@ import axios from "@/utils/axios";
  * @param data
  * @returns {*}
  */
-export function login(data) {
+export function getLogin(data) {
   return axios({
     url: "/api/login",
+    method: "post",
+    data
+  });
+}
+
+/**
+ * 获取用户信息
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function getUserInfo(data) {
+  return axios({
+    url: "/api/user/info",
     method: "post",
     data
   });

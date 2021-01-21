@@ -1,189 +1,95 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import Home from "@/views/Home.vue";
 
 Vue.use(VueRouter);
+// 引入登陆页面
+import Login from "../views/login/index";
+import Home from "../views/Home.vue";
+import Dashboard from "../views/dashboard/index";
 
-/* Layout */
-import Layout from "@/layout";
-
-/* Router Modules */
-import userRouter from "./modules/user";
-
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
-export const constantRoutes = [
-  {
-    path: "/redirect",
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: "/redirect/:path(.*)",
-        component: () => import("@/views/redirect/index")
-      }
-    ]
-  },
+export const staticRoutes = [
   {
     path: "/login",
-    component: () => import("@/views/login/index"),
-    hidden: true
-  },
+    name: "login",
+    component: Login
+  }
+  // {
+  //   path: "/dashboard",
+  //   name: "dashboard",
+  //   component: Dashboard
+  // }
+  // {
+  //   path: "/home",
+  //   name: "Home",
+  //   component: Home
+  // }
+];
+
+// 异步（动态）挂载的路由，根据权限展示
+export const asyncRouteMap = [
   {
     path: "/",
-    component: Layout,
-    redirect: "/dashboard",
-    children: [
-      {
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index"),
-        name: "Dashboard",
-        meta: { title: "Dashboard", icon: "dashboard", affix: true }
-      }
-    ]
-  }
-];
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
-  {
-    path: "/permission",
-    component: Layout,
-    redirect: "/permission/page",
-    alwaysShow: true, // will always show the root menu
-    name: "Permission",
+    name: "Home",
+    component: Home,
     meta: {
-      title: "Permission",
-      icon: "lock",
-      roles: ["admin", "editor"] // you can set roles in root nav
+      role: ["admin", "super_editor"] // 页面需要的权限
+    }
+  },
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: Dashboard
+  },
+  {
+    path: "/details",
+    name: "details",
+    component: () => import("../views/tt"),
+    meta: {
+      role: ["admin", "super_editor"] // 页面需要的权限
     },
     children: [
       {
-        path: "page",
-        component: () => import("@/views/permission/page"),
-        name: "PagePermission",
+        path: "index",
+        name: "index",
+        component: () => import("../views/tt/child"),
         meta: {
-          title: "Page Permission",
-          roles: ["admin"] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: "directive",
-        component: () => import("@/views/permission/directive"),
-        name: "DirectivePermission",
-        meta: {
-          title: "Directive Permission"
-          // if do not set roles, means: this page does not require permission
-        }
-      },
-      {
-        path: "role",
-        component: () => import("@/views/permission/role"),
-        name: "RolePermission",
-        meta: {
-          title: "Role Permission",
-          roles: ["admin"]
-        }
+          role: ["admin", "super_editor"] // 页面需要的权限
+        },
+        children: [
+          {
+            path: "/next",
+            name: "next",
+            meta: {
+              role: ["admin", "super_editor"] // 页面需要的权限
+            }
+          }
+        ]
       }
     ]
   },
-
-  /** when your routing map is too long, you can split it into small modules **/
-  userRouter,
   {
     path: "/error",
-    component: Layout,
-    redirect: "noRedirect",
-    name: "ErrorPages",
-    meta: {
-      title: "Error Pages",
-      icon: "404"
-    },
-    children: [
-      {
-        path: "401",
-        component: () => import("@/views/error-page/401"),
-        name: "Page401",
-        meta: { title: "401", noCache: true }
-      },
-      {
-        path: "404",
-        component: () => import("@/views/error-page/404"),
-        name: "Page404",
-        meta: { title: "404", noCache: true }
-      }
-    ]
+    component: () => import("../views/error/404"),
+    name: 404
   },
-
-  {
-    path: "/error-log",
-    component: Layout,
-    children: [
-      {
-        path: "log",
-        component: () => import("@/views/error-log/index"),
-        name: "ErrorLog",
-        meta: { title: "Error Log", icon: "bug" }
-      }
-    ]
-  },
-
-  {
-    path: "external-link",
-    component: Layout,
-    children: [
-      {
-        path: "https://github.com/dao-projects/vue-iview-admin-template",
-        meta: { title: "External Link", icon: "link" }
-      }
-    ]
-  },
-
-  // 404 page must be placed at the end !!!
-  { path: "*", redirect: "/404", hidden: true }
+  { path: "*", redirect: "/error", hidden: true }
 ];
+
+// 因为可以动态的挂载路由，但是不能动态删除路由。所以才考略到，
+// 在需要动态清空动态挂载路由的话，直接将一个新的路由对象赋值给旧的路由对象，这样就可以达到动态清除的工作
 
 const createRouter = () =>
   new VueRouter({
-    // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
+    routes: staticRoutes
   });
 
 const router = createRouter();
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+// 调用该方法动态清除动态挂载路由
 export function resetRouter() {
   const newRouter = createRouter();
   router.matcher = newRouter.matcher; // reset router
 }
 
 export default router;
-//---------------------------------
-// const routes = [
-//   {
-//     path: "/",
-//     name: "Home",
-//     component: Home
-//   },
-//   {
-//     path: "/about",
-//     name: "About",
-//     // route level code-splitting
-//     // this generates a separate chunk (about.[hash].js) for this route
-//     // which is lazy-loaded when the route is visited.
-//     component: () => import(/* webpackChunkName: "about" */ "../views/About.vue")
-//   }
-// ];
-//
-// const router = new VueRouter({
-//   routes
-// });
-//
-// export default router;
