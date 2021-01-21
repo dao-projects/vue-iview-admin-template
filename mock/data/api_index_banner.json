@@ -1,0 +1,53 @@
+{
+  "code": 200,
+  "data": {
+    "data": [
+      {
+        "BT": "中国银行-banner",
+        "SWJ": 1,
+        "PX": 0,
+        "HREF": null,
+        "NSR": 1,
+        "URL": "bankproducts/1609221670094.png",
+        "YH": 1
+      },
+      {
+        "BT": "天府banner",
+        "SWJ": 1,
+        "PX": 1,
+        "HREF": null,
+        "NSR": 1,
+        "URL": "bankproducts/1606804963998.png",
+        "YH": 1
+      },
+      {
+        "BT": "建设银行-banner",
+        "SWJ": 1,
+        "PX": 2,
+        "HREF": null,
+        "NSR": 1,
+        "URL": "bankproducts/1608522521798.jpg",
+        "YH": 1
+      },
+      {
+        "BT": "12-24-banner",
+        "SWJ": 1,
+        "PX": 3,
+        "HREF": null,
+        "NSR": 1,
+        "URL": "bankproducts/1608886226563.png",
+        "YH": 1
+      },
+      {
+        "BT": "12-25-banner",
+        "SWJ": 1,
+        "PX": 4,
+        "HREF": null,
+        "NSR": 1,
+        "URL": "bankproducts/1608888059625.png",
+        "YH": 1
+      }
+    ]
+  },
+  "mes": "请求成功"
+}

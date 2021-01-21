@@ -1,0 +1,10 @@
+{
+  "code": 200,
+  "data": {
+    "roles": ["admin"],
+    "name": "张先生",
+    "avatar": "img/user.png",
+    "introduction": ""
+  },
+  "mes": "请求成功！"
+}

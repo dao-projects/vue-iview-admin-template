@@ -13,10 +13,10 @@ export default {
   name: "Home",
   created() {
     console.log(this);
-    this.$Modal.error({
-      title: "响应错误提示",
-      content: "Error"
-    });
+    // this.$Modal.error({
+    //   title: "响应错误提示",
+    //   content: "Error"
+    // });
   },
   components: {
     HelloWorld
