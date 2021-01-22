@@ -48,7 +48,7 @@ Options:
 
   -o, --open         Open browser
   -c, --copy         Copy local url to clipboard
-  -p, --port <port>  Port used by the server (default: 8080 or next available port)
+  -p, --port <port>  Port used by the request (default: 8080 or next available port)
   -h, --help         Output usage information
 
  # vue serve

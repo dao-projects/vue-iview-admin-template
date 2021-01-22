@@ -133,3 +133,12 @@ export default service;
 //   });
 //   //  或者return axios.post();
 // }
+
+// ------------------
+// getRequest.js
+// import request from "./axios";
+// function myServer() {
+//   this.request = request;
+// }
+//
+// export default new myServer();

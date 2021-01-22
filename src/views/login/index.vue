@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import api from "../../api";
 export default {
   name: "index",
   data: function() {
@@ -21,6 +22,13 @@ export default {
       }
     };
   },
+  created() {
+    // api.news.list();
+  },
+  // mounted: () => {
+  //   // api.news.list();
+  //   // api.v(this)
+  // },
   methods: {
     userLogin() {
       this.$store

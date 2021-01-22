@@ -24,4 +24,10 @@ module.exports = app => {
   app.post("/api/logout", function(req, res) {
     res.json({ code: 200, data: "/api/logout", mes: "请求成功！" });
   });
+  app.get("/api/news/list", function(req, res) {
+    res.json({ code: 200, data: "/api/news/list", mes: "请求成功！" });
+  });
+  app.post("/api/news/list/add", function(req, res) {
+    res.json({ code: 200, data: "/api/news/list/add", mes: "请求成功！" });
+  });
 };
