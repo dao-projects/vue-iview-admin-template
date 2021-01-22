@@ -1,10 +1,13 @@
 <template>
-  <div>tt</div>
+  <div>
+    <div>error</div>
+    <router-view />
+  </div>
 </template>
 
 <script>
 export default {
-  name: "tt"
+  name: "index"
 };
 </script>
 

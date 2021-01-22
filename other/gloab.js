@@ -1,6 +1,6 @@
 // 先把路由和vuex引进来使用
-import router from "../router";
-import store from "./index";
+import router from "@/router";
+import store from "@/router";
 
 const whiteList = ["/login"]; // 不重定向白名单
 

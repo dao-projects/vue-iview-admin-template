@@ -12,8 +12,9 @@
 
 <script>
 import api from "../../api";
+
 export default {
-  name: "index",
+  name: "login",
   data: function() {
     return {
       userInfo: {
@@ -30,18 +31,18 @@ export default {
   //   // api.v(this)
   // },
   methods: {
-    userLogin() {
-      this.$store
-        .dispatch("userLogin", this.userInfo)
-        .then(res => {
-          console.log(res);
-          // 登陆成功跳转主页
-          this.$router.push("/home");
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    // userLogin() {
+    //   this.$store
+    //     .dispatch("userLogin", this.userInfo)
+    //     .then(res => {
+    //       console.log(res);
+    //       // 登陆成功跳转主页
+    //       this.$router.push("/home");
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     });
+    // }
   }
 };
 </script>

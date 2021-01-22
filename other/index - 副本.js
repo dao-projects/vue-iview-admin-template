@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 import Layout from "@/layout";
 
 /* Router Modules */
-import userRouter from "./modules/user";
+import userRouter from "@/router/modules/user_back";
 
 /**
  * constantRoutes
@@ -23,13 +23,13 @@ export const constantRoutes = [
     children: [
       {
         path: "/redirect/:path(.*)",
-        component: () => import("@/views/redirect/index")
+        component: () => import("@/views/redirect")
       }
     ]
   },
   {
     path: "/login",
-    component: () => import("@/views/login/index"),
+    component: () => import("@/views/login"),
     hidden: true
   },
   {
@@ -39,7 +39,7 @@ export const constantRoutes = [
     children: [
       {
         path: "dashboard",
-        component: () => import("@/views/dashboard/index"),
+        component: () => import("@/views/dashboard"),
         name: "Dashboard",
         meta: { title: "Dashboard", icon: "dashboard", affix: true }
       }
@@ -127,7 +127,7 @@ export const asyncRoutes = [
     children: [
       {
         path: "log",
-        component: () => import("@/views/error-log/index"),
+        component: () => import("@/views/error-log"),
         name: "ErrorLog",
         meta: { title: "Error Log", icon: "bug" }
       }

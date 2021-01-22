@@ -1,10 +1,10 @@
 <template>
-  <div>tt</div>
+  <div>卡卡</div>
 </template>
 
 <script>
 export default {
-  name: "tt"
+  name: "index"
 };
 </script>
 

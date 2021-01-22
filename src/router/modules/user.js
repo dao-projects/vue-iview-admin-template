@@ -1,30 +1,31 @@
-/** When your routing table is too long, you can split it into small modules **/
-
-import Layout from "@/layout";
-
-const userRouter = {
-  path: "/user",
-  component: Layout,
-  redirect: "/user/info",
-  name: "User",
-  meta: {
-    title: "User",
-    icon: "user"
-  },
-  children: [
-    {
-      path: "a",
-      component: () => import("@/views/user/a"),
-      name: "UserA",
-      meta: { title: "User B" }
+export default [
+  {
+    path: "/user",
+    name: "User",
+    component: () => import(/* webpackChunkName: "user" */ "@/views/user/index"),
+    meta: {
+      title: "用户管理",
+      role: ["admin", "super_editor"] // 页面需要的权限
     },
-    {
-      path: "b",
-      component: () => import("@/views/user/b"),
-      name: "UserB",
-      meta: { title: "User B" }
-    }
-  ]
-};
-
-export default userRouter;
+    children: [
+      {
+        path: "a",
+        name: "A",
+        component: () => import(/* webpackChunkName: "user" */ "@/views/user/a"),
+        meta: {
+          title: "用户管理-a",
+          role: ["admin", "super_editor"] // 页面需要的权限
+        }
+      },
+      {
+        path: "b",
+        name: "B",
+        component: () => import(/* webpackChunkName: "user" */ "@/views/user/b"),
+        meta: {
+          title: "用户管理-b",
+          role: ["admin", "super_editor"] // 页面需要的权限
+        }
+      }
+    ]
+  }
+];
