@@ -1,8 +1,8 @@
 module.exports = app => {
-  app.get("/api/login", function(req, res) {
+  app.get("/api/user/login", function(req, res) {
     res.json({ code: 200, data: "/get/api/login", mes: "请求成功！" });
   });
-  app.post("/api/login", function(req, res) {
+  app.post("/api/user/login", function(req, res) {
     res.json({
       code: 200,
       data: {
@@ -11,7 +11,7 @@ module.exports = app => {
       mes: "请求成功！"
     });
   });
-  app.post("/api/user/info", function(req, res) {
+  app.get("/api/user/info", function(req, res) {
     res.json({
       code: 200,
       data: {
@@ -21,7 +21,7 @@ module.exports = app => {
       mes: "请求成功！"
     });
   });
-  app.post("/api/logout", function(req, res) {
+  app.post("/api/user/logout", function(req, res) {
     res.json({ code: 200, data: "/api/logout", mes: "请求成功！" });
   });
   app.get("/api/news/list", function(req, res) {
@@ -29,5 +29,8 @@ module.exports = app => {
   });
   app.post("/api/news/list/add", function(req, res) {
     res.json({ code: 200, data: "/api/news/list/add", mes: "请求成功！" });
+  });
+  app.get("/api/user/info", function(req, res) {
+    res.json({ code: 200, data: { roles: ["admin"] }, mes: "请求成功！" });
   });
 };

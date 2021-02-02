@@ -8,7 +8,7 @@ Vue.use(VueRouter);
 import Layout from "@/layout";
 
 /* Router Modules */
-import userRouter from "@/router/modules/user_back";
+import userRouter from "./user_back";
 
 /**
  * constantRoutes

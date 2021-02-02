@@ -12,7 +12,7 @@ export default [
     name: "Home",
     component: () => import(/* webpackChunkName: "home" */ "@/views/Home"),
     meta: {
-      role: ["admin", "super_editor"] // 页面需要的权限
+      roles: ["admin", "super_editor"] // 页面需要的权限
     }
   },
   {
@@ -20,7 +20,9 @@ export default [
     name: "Dashboard",
     component: () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/index"),
     meta: {
-      role: ["admin", "super_editor"]
+      roles: ["admin", "super_editor"]
     }
-  }
+  },
+  //空白页面跳转
+  { path: "*", redirect: "/error", hidden: true }
 ];

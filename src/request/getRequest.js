@@ -75,7 +75,7 @@ daoServer.prototype.sendMessage = function(moduleName, apiname, url, config = {}
   if (self[moduleName][apiname].status === "ready") {
     // console.log(moduleName, apiname, url, data, config, self.dataset);
     // console.log(conf);
-    if (type === "get" && conf.headers) {
+    if (type === "get" && conf?.headers) {
       data["headers"] = conf.headers;
     }
     // console.log(url, data, conf);

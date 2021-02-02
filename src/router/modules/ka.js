@@ -5,7 +5,7 @@ export default [
     component: () => import(/* webpackChunkName: "ka" */ "@/views/ka/index"),
     meta: {
       title: "卡卡",
-      role: ["admin", "super_editor"] // 页面需要的权限
+      roles: ["admin", "super_editor"] // 页面需要的权限
     }
   }
 ];

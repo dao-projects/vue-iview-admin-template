@@ -31,6 +31,6 @@ export default [
         component: () => import(/* webpackChunkName: "403" */ "@/views/error/404")
       }
     ]
-  },
-  { path: "*", redirect: "/error", hidden: true }
+  }
+  // { path: "*", redirect: "/error", hidden: true }
 ];
