@@ -12,6 +12,7 @@ export default [
     name: "Home",
     component: () => import(/* webpackChunkName: "home" */ "@/views/Home"),
     meta: {
+      title: "首页",
       roles: ["admin", "super_editor"] // 页面需要的权限
     }
   },
@@ -20,6 +21,7 @@ export default [
     name: "Dashboard",
     component: () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/index"),
     meta: {
+      title: "面板",
       roles: ["admin", "super_editor"]
     }
   },

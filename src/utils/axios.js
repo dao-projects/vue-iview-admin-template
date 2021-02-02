@@ -1,144 +1,125 @@
 import axios from "axios";
-// import { MessageBox, Message } from "element-ui";
-import store from "@/store";
-import { getToken } from "@/utils/token";
 
-// create an axios instance
+/**
+ * 初始化默认
+ * @example
+ *    axios.defaults.timeout = 8000;
+ *    axios.defaults.headers["zd"] = "2";
+ *    axios.create({
+ *          baseURL: process.env.BASE_URL,
+ *          withCredentials: true,
+ *          timeout: 5000,
+ *          headers: {
+ *              "Content-Type": "application/x-www-form-urlencoded",
+ *              "X-Token": "uid001"
+ *          }
+ *    })
+ */
 const service = axios.create({
-  baseURL: process.env.BASE_URL, // url = base url + request url
-  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  baseURL: process.env.BASE_URL,
+  timeout: 5000
 });
-
-// request interceptor
+/**
+ * 请求前拦截
+ * 用于处理需要请求前的操作
+ * @example
+ *    config => {
+ *      if (store.getters.token) {
+ *        config.headers["X-Token"] = getToken();
+ *        config.headers["zd"] = 1;
+ *      }
+ *      return config
+ *    },
+ *    error=>{
+ *      return Promise.reject(error);
+ *    }
+ */
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
-
-    if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers["X-Token"] = getToken();
-    }
     return config;
   },
   error => {
-    // do something with request error
-    console.log(error); // for debug
     return Promise.reject(error);
   }
 );
 
-// response interceptor
+/**
+ * 请求相应拦截
+ * 用于处理需要请求前的操作
+ * @example
+ *    response=>{
+ *      const res = response.data;
+ *      if (res.code !== 200) {
+ *        if(res.code === 403 ){}
+ *        if(res.code === 301 ){}
+ *        //return Promise.reject(new Error(res.message || "Error"));
+ *        return Promise.reject(res);
+ *      }else{
+ *        return Promise.resolve(res);
+ *      }
+ *      //return new Promise((resolve, reject) => {
+ *      //  let res = response.data;
+ *      //  if (res.code !== 200) {
+ *      //     reject(new Error(res.message || "Error"))
+ *      //  }else{
+ *      //     resolve(res);
+ *      //  }
+ *      })
+ *    },
+ *    error=>{
+ *        return Promise.reject(error);
+ *    }
+ */
 service.interceptors.response.use(
-  /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
-   */
-
-  /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
   response => {
     const res = response.data;
-    console.log(res);
-
-    // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
-      // Message({
-      //   message: res.message || "Error",
-      //   type: "error",
-      //   duration: 5 * 1000
-      // });
-      // this.$Modal.error({
-      //   title: "响应错误提示",
-      //   content: res.message || "Error"
-      // });
-      console.log("响应错误提示:", res.message || "Error");
-
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        // MessageBox.confirm(
-        //   "You have been logged out, you can cancel to stay on this page, or log in again",
-        //   "Confirm logout",
-        //   {
-        //     confirmButtonText: "Re-Login",
-        //     cancelButtonText: "Cancel",
-        //     type: "warning"
-        //   }
-        // ).then(() => {
-        //   store.dispatch("user/resetToken").then(() => {
-        //     location.reload();
-        //   });
-        // });
-      }
-      return Promise.reject(new Error(res.message || "Error"));
+      return Promise.reject(res);
     } else {
-      return res;
+      return Promise.resolve(res);
     }
   },
   error => {
-    console.log("err" + error); // for debug
-    // Message({
-    //   message: error.message,
-    //   type: "error",
-    //   duration: 5 * 1000
-    // });
+    //断网处理或者请求超时
+    if (!error.response) {
+      //请求超时
+      if (error.message.includes("timeout")) {
+        console.log("请求超时,请检查互联网连接");
+      } else {
+        //断网了
+        console.log("请检查网络是否已连接");
+      }
+      return;
+    }
+    const status = error.response.status;
+    switch (status) {
+      case 500:
+        console.log("操作失败");
+        break;
+      case 404:
+        console.log("未找到远程服务器");
+        break;
+      default:
+        console.log("请求失败");
+    }
     return Promise.reject(error);
   }
 );
 
+/**
+ * @example
+ *    GET
+ *        export const get = (url, params, config = {}) => axios({ method: "post", url, params, ...config });
+ *    POST
+ *        export const post = (url, data = {}, config = {}) => axios({ method: "post", url, data, ...config })
+ *    获取远端图片
+ *        axios({ method: "get", url: "http://bit.ly/2mTM3nY", responseType: "stream" }).then(response =>
+ *            response.data.pipe(fs.createWriteStream("ada_lovelace.jpg"))
+ *        );
+ * @example
+ *    import axios from "@/utils/axios";
+ *    export function login(data) {
+ *        return axios({ url: "/api/user/login", method: "post", data });
+ *    }
+ */
 export default service;
-//
-// /**
-//  * 封装get方法，对应get请求
-//  * @param {String} url [请求的url地址]
-//  * @param {Object} params [请求时携带的参数]
-//  */
-// function get(url, params = {}) {
-//   return new Promise((resolve, reject) => {
-//     axios
-//       .get(url, {
-//         params: params
-//       })
-//       .then(res => {
-//         resolve(res.data);
-//       })
-//       .catch(err => {
-//         reject(err.data);
-//       });
-//   });
-//   // 或者return axios.get();
-// }
-// /**
-//  * post方法，对应post请求
-//  * @param {String} url [请求的url地址]
-//  * @param {Object} params [请求时携带的参数]
-//  */
-// function post(url, params) {
-//   return new Promise((resolve, reject) => {
-//     axios
-//       .post(url, qs.stringify(params))
-//       .then(res => {
-//         resolve(res.data);
-//       })
-//       .catch(err => {
-//         reject(err.data);
-//       });
-//   });
-//   //  或者return axios.post();
-// }
-
-// ------------------
-// getRequest.js
-// import request from "./axios";
-// function myServer() {
-//   this.request = request;
-// }
-//
-// export default new myServer();

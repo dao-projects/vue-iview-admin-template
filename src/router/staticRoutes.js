@@ -13,12 +13,18 @@ export default [
   {
     path: "/login",
     name: "Login",
-    component: () => import(/* webpackChunkName: "login" */ "@/views/login/index")
+    component: () => import(/* webpackChunkName: "login" */ "@/views/login/index"),
+    meta: {
+      title: "登录"
+    }
   },
   {
     path: "/error",
     name: "Error",
     component: () => import(/* webpackChunkName: "error" */ "@/views/error/index"),
+    meta: {
+      title: "错误"
+    },
     children: [
       {
         path: "301",

@@ -1,5 +1,10 @@
-// 异步（动态）路由
+/**
+ * 异步（动态）路由
+ */
 import asyncRoutes from "@/router/asyncRoute";
+/**
+ * 异步（静态）路由
+ */
 import staticRoutes from "@/router/staticRoutes";
 
 /**
@@ -44,7 +49,7 @@ export default {
     SET_ROUTES: (state, routes) => {
       state.addRoutes = routes;
       state.routes = staticRoutes.concat(routes);
-      console.log(state.routes.map(v => v.path));
+      // console.log(state.routes.map(v => v.path));
     }
   },
   actions: {

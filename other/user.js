@@ -1,4 +1,4 @@
-import axios from "@/utils/axios";
+import axios from "@/request/axios";
 
 /**
  * 登陆

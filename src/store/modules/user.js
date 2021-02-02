@@ -7,15 +7,16 @@ export default {
   state: {
     token: getToken(),
     name: "",
-    avatar: ""
-    // roles: []
+    avatar: "",
+    roles: []
   },
   mutations: {
     RESET_STATE: state => {
       Object.assign(state, {
         token: getToken(),
         name: "",
-        avatar: ""
+        avatar: "",
+        roles: []
       });
     },
     SET_TOKEN: (state, token) => {
@@ -26,10 +27,10 @@ export default {
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar;
+    },
+    SET_ROLES: (state, roles) => {
+      state.roles = roles;
     }
-    // SET_ROLES: (state, roles) => {
-    //   state.roles = roles;
-    // }
   },
   actions: {
     // user login
@@ -37,13 +38,13 @@ export default {
       const { username, password } = userInfo;
       return new Promise((resolve, reject) => {
         api.user
-          .login({ data: { username: username.trim(), password: password } })
+          .login({ username: username.trim(), password: password })
           .then(response => {
             const { data } = response;
-            console.log(data, "SET_TOKEN");
-            commit("SET_TOKEN", data.token);
-            setToken(data.token);
-            resolve();
+            // console.log(data);
+            commit("SET_TOKEN", data.token || "");
+            setToken(data.token || "");
+            resolve(data);
           })
           .catch(error => {
             reject(error);
@@ -54,13 +55,14 @@ export default {
     getInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         api.user
-          .info({ params: { token: state.token } })
+          .info({ token: state.token })
           .then(response => {
             const { data } = response;
             if (!data) {
               return reject("Verification failed, please Login again.");
             }
-            const { name, avatar } = data;
+            const { name, avatar, roles } = data;
+            commit("SET_ROLES", roles);
             commit("SET_NAME", name);
             commit("SET_AVATAR", avatar);
             resolve(data);
@@ -75,12 +77,12 @@ export default {
     logout({ commit, state }) {
       return new Promise((resolve, reject) => {
         api.user
-          .logout({ data: { token: state.token } })
-          .then(() => {
+          .logout({ token: state.token })
+          .then(res => {
             removeToken(); // must remove  token  first
             resetRouter();
             commit("RESET_STATE");
-            resolve();
+            resolve(res);
           })
           .catch(error => {
             reject(error);
@@ -95,23 +97,6 @@ export default {
         resolve();
       });
     }
-
-    // // eslint-disable-next-line no-unused-vars
-    // getInfo({ commit }, data) {
-    //   // eslint-disable-next-line no-unused-vars
-    //   return new Promise((resolve, reject) => {
-    //     api.user.info({
-    //       success: res => {
-    //         const { roles = [] } = res.data;
-    //         console.log(roles);
-    //         commit("SET_ROLES", roles);
-    //         resolve({ roles: roles });
-    //       }
-    //     });
-    //     // commit("SET_ROLES", ["admin"]);
-    //     // resolve({ roles: ["admin"] });
-    //   });
-    // }
   },
   getters: {}
 };

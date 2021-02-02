@@ -65,7 +65,11 @@ export default {
             .dispatch("user/login", this.loginForm)
             .then(res => {
               console.log(res);
-              this.$router.push({ path: this.redirect || "/" });
+              if (res) {
+                this.$router.push({ path: this.redirect || "/" });
+              } else {
+                this.$Message.error("登录异常请稍后再试!");
+              }
               this.loading = false;
             })
             .catch(() => {

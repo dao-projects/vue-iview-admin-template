@@ -1,5 +1,67 @@
 import server from "./server";
 
+//
+// function apiServer(name, params) {
+//   let _this = this;
+//   _this[name] = {};
+//   Object.keys(params).forEach(apiname => {
+//     let url = params[apiname];
+//     let config = {};
+//     if (typeof url === "object") {
+//       url = url["url"];
+//       config = params[apiname];
+//     }
+//     // console.log(url, config);
+//     // this[name][apiname] = this.sendMessage.bind(this, name, apiname, url, config);
+//     _this[name][apiname] = { name, apiname, url, config };
+//     //阻止重复提交
+//     _this[name][apiname].status = "ready";
+//   });
+//   return new Promise((resolve, reject) => {
+//     console.log(_this);
+//     resolve(1);
+//     reject(2);
+//   });
+// }
+const apis = {
+  user: {
+    login: { url: "/api/user/login", type: "post" },
+    info: "/api/user/info",
+    logout: { url: "/api/user/logout", type: "post" }
+  },
+  news: {
+    list: "/api/news/list"
+  }
+};
+let apiServer = {};
+Object.keys(apis).map(api => {
+  apiServer[api] = {};
+  let apiObj = apis[api];
+  // console.log("模块=>", api, apiObj);
+  Object.keys(apiObj).map(apilist => {
+    // console.log("模块-方法=>", apilist);
+    let url = apiObj[apilist];
+    let config = {};
+    if (typeof url === "object") {
+      url = url["url"];
+      config = apiObj[apilist];
+    }
+    console.log({ api, apilist, url, config });
+    const { type = "get", data = {}, bindName = apilist, config: conf = null } = config;
+    //url动态参数替换
+    url = url.replace(/{(\w+)}/g, function(k) {
+      const pars = k.slice(1, -1);
+      return data[pars] || pars;
+    });
+    server[type](url, data, conf)
+      .then(res => {
+        console.log(res, bindName);
+      })
+      .catch(error => console.log(error, bindName));
+  });
+});
+console.log(apiServer, "apiServer");
+
 function daoServer() {
   this.server = server;
   this.nowhandle = {};

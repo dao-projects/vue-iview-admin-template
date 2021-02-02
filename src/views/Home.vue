@@ -1,79 +1,111 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" info="Hello Info!" />
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      |
-      <router-link to="/about">About</router-link>
-      <Button>Default</Button>
-      <Button type="primary">Primary</Button>
-      <Button type="dashed">Dashed</Button>
-      <Button type="text">Text</Button>
-      <br /><br />
-      <Button type="info">Info</Button>
-      <Button type="success">Success</Button>
-      <Button type="warning">Warning</Button>
-      <Button type="error">Error</Button>
-      <p>{{ list }}</p>
-      <p>{{ listAdd }}</p>
-    </div>
+  <div class="layout">
+    <Layout>
+      <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
+        <Menu active-name="1-2" theme="dark" width="auto" :open-names="['1']" :class="menuitemClasses">
+          <Submenu v-for="(item, i) in menus" :name="i + 1" :key="i">
+            <template slot="title">
+              <Icon type="ios-navigate"></Icon>
+              {{ item.title || item.name }}
+            </template>
+            <MenuItem v-for="(ic, j) in item.children" :name="i + '-' + (j + 1)" :key="j">
+              {{ ic.name || "cs" }}
+            </MenuItem>
+          </Submenu>
+          <!--          <Submenu name="1">-->
+          <!--            <template slot="title">-->
+          <!--              <Icon type="ios-navigate"></Icon>-->
+          <!--              Item 1-->
+          <!--            </template>-->
+          <!--            <MenuItem name="1-1">Option 1</MenuItem>-->
+          <!--            <MenuItem name="1-2">Option 2</MenuItem>-->
+          <!--            <MenuItem name="1-3">Option 3</MenuItem>-->
+          <!--          </Submenu>-->
+          <!--          <Submenu name="2">-->
+          <!--            <template slot="title">-->
+          <!--              <Icon type="ios-keypad"></Icon>-->
+          <!--              Item 2-->
+          <!--            </template>-->
+          <!--            <MenuItem name="2-1">Option 1</MenuItem>-->
+          <!--            <MenuItem name="2-2">Option 2</MenuItem>-->
+          <!--          </Submenu>-->
+          <!--          <Submenu name="3">-->
+          <!--            <template slot="title">-->
+          <!--              <Icon type="ios-analytics"></Icon>-->
+          <!--              Item 3-->
+          <!--            </template>-->
+          <!--            <MenuItem name="3-1">Option 1</MenuItem>-->
+          <!--            <MenuItem name="3-2">Option 2</MenuItem>-->
+          <!--          </Submenu>-->
+        </Menu>
+        <div slot="trigger"></div>
+      </Sider>
+      <Layout>
+        <Header class="layout-header-bar">嘻嘻嘻</Header>
+        <Content :style="{ margin: '20px', background: '#fff', minHeight: '220px' }">
+          Content
+        </Content>
+      </Layout>
+    </Layout>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-import { default as api } from "../api";
+// import HelloWorld from "@/components/HelloWorld.vue";
+// import Header from "@/components/Header.vue";
+// import { default as api } from "../api";
 
 export default {
   name: "Home",
-  data: function() {
+  data() {
     return {
-      list: undefined,
-      listAdd: ""
+      isCollapsed: false,
+      menus: []
     };
   },
   created() {
-    console.log(this.$route);
-    // this.$Modal.error({
-    //   title: "响应错误提示",
-    //   content: "Error"
-    // });
+    this.menus = this.$store.state.permission.routes;
+    console.log(this.$store.state, this.menus);
   },
-  mounted: function() {
-    api.v(this);
-    api.news.list({
-      data: { params: { id: 333 } },
-      config: {
-        headers: { "x-Token": "1111111" }
-      }
-    });
-    // api.news.v(this);
-    // api
-    //   // .datasets({
-    //   //   data: { id: 123 },
-    //   //   config: {
-    //   //     headers: { "x-Token": "sdfsdfsf" }
-    //   //   },
-    //   //   success: res => {
-    //   //     console.log(res);
-    //   //   }
-    //   // })
-    api.news.listAdd({
-      data: { id: 456 },
-      type: "post",
-      config: {
-        headers: { "x-Token": "1111111" }
-      },
-      success: res => {
-        console.log(res);
-      }
-    });
-    // api.v(this);
-  },
-  components: {
-    HelloWorld
+  computed: {
+    menuitemClasses: function() {
+      return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
+    }
   }
 };
 </script>
+<style scoped>
+.layout {
+  position: relative;
+  overflow: hidden;
+}
+.layout-header-bar {
+  background: #fff;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+.menu-item span {
+  display: inline-block;
+  overflow: hidden;
+  width: 69px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  transition: width 0.2s ease 0.2s;
+}
+.menu-item i {
+  transform: translateX(0px);
+  transition: font-size 0.2s ease, transform 0.2s ease;
+  vertical-align: middle;
+  font-size: 16px;
+}
+.collapsed-menu span {
+  width: 0px;
+  transition: width 0.2s ease;
+}
+.collapsed-menu i {
+  transform: translateX(5px);
+  transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
+  vertical-align: middle;
+  font-size: 22px;
+}
+</style>
