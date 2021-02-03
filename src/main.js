@@ -10,8 +10,10 @@ import store from "./store";
 // Vue.component("Button", Button);
 import iview from "view-design";
 import "@/styles/theme.less";
-
 Vue.use(iview);
+
+import { Plugin } from "vue-fragment";
+Vue.use(Plugin);
 // ---------------------
 // import filters from "./filters/index";
 // // 注入全局过滤器
@@ -28,13 +30,13 @@ import { getToken } from "@/utils/token";
 
 const whiteList = ["/login", "/auth-redirect"]; // no redirect whitelist
 router.beforeEach(async (to, from, next) => {
+  iview.LoadingBar.start();
   const hasToken = getToken();
   if (hasToken) {
     if (to.path === "/login") {
       next({ path: "/" });
     } else {
       const hasRoles = !!(store.state.user.roles && store.state.user.roles.length > 0);
-      console.log(hasRoles);
       if (hasRoles) {
         next();
       } else {
@@ -44,6 +46,7 @@ router.beforeEach(async (to, from, next) => {
           router.addRoutes(accessRoutes);
           next({ ...to, replace: true });
         } catch (error) {
+          await store.dispatch("user/resetToken");
           next(`/login?redirect=${to.path}`);
           // next();
         }
@@ -57,6 +60,10 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 });
+router.afterEach(() => {
+  iview.LoadingBar.finish();
+});
+
 // --------------------------
 new Vue({
   router,

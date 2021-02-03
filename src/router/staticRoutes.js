@@ -11,20 +11,20 @@ import ka from "./modules/ka";
 export default [
   ...ka,
   {
+    hidden: true,
     path: "/login",
     name: "Login",
     component: () => import(/* webpackChunkName: "login" */ "@/views/login/index"),
     meta: {
-      title: "登录"
+      title: "登录",
+      roles: []
     }
   },
   {
+    hidden: true,
     path: "/error",
     name: "Error",
     component: () => import(/* webpackChunkName: "error" */ "@/views/error/index"),
-    meta: {
-      title: "错误"
-    },
     children: [
       {
         path: "301",

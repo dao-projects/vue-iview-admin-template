@@ -1,10 +1,15 @@
+/* Layout */
+import Layout from "@/layout/index";
 export default [
   {
     path: "/user",
-    name: "User",
-    component: () => import(/* webpackChunkName: "user" */ "@/views/user/index"),
+    // name: "User",
+    component: Layout,
+    redirect: "/dashboard",
+    // component: () => import(/* webpackChunkName: "user" */ "@/views/user/index"),
     meta: {
       title: "用户管理",
+      icon: "ios-body",
       roles: ["admin"] // 页面需要的权限
     },
     children: [
@@ -14,7 +19,7 @@ export default [
         component: () => import(/* webpackChunkName: "user" */ "@/views/user/a"),
         meta: {
           title: "用户管理-a",
-          roles: ["admin"] // 页面需要的权限
+          roles: ["super_delete"] // 页面需要的权限
         }
       },
       {
