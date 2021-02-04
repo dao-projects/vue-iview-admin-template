@@ -69,7 +69,7 @@ export default [
         path: "index",
         component: () => import("@/views/ka/index"),
         name: "ka",
-        meta: { title: "卡机", icon: "dashboard", roles: ["admin", "super_editor"] }
+        meta: { title: "卡机d", icon: "dashboard", roles: ["admin", "super_editor"] }
       }
     ]
   },
