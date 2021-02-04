@@ -1,35 +1,28 @@
-/* Layout */
-import Layout from "@/layout/index";
+import { Layout, auth } from "../config";
 export default [
   {
     path: "/user",
-    // name: "User",
     component: Layout,
-    redirect: "/dashboard",
-    // component: () => import(/* webpackChunkName: "user" */ "@/views/user/index"),
-    meta: {
-      title: "用户管理",
-      icon: "ios-body",
-      roles: ["admin"] // 页面需要的权限
-    },
+    redirect: "/user/index",
+    meta: { title: "用户管理", roles: auth["admin"], icon: "ios-analytics" },
     children: [
       {
-        path: "a",
-        name: "A",
-        component: () => import(/* webpackChunkName: "user" */ "@/views/user/a"),
-        meta: {
-          title: "用户管理-a",
-          roles: ["super_delete"] // 页面需要的权限
-        }
+        path: "index",
+        component: () => import("@/views/user/index"),
+        name: "user",
+        meta: { title: "用户管理", roles: ["admin", "super_editor"] }
       },
       {
-        path: "b",
-        name: "B",
-        component: () => import(/* webpackChunkName: "user" */ "@/views/user/b"),
-        meta: {
-          title: "用户管理-b",
-          roles: ["admin"] // 页面需要的权限
-        }
+        path: "aa",
+        component: () => import("@/views/user/a"),
+        name: "aa",
+        meta: { title: "用户管理-a", roles: ["admin", "super_editor"] }
+      },
+      {
+        path: "bb",
+        component: () => import("@/views/user/b"),
+        name: "bb",
+        meta: { title: "用户管理-b", roles: ["admin", "super_editor"] }
       }
     ]
   }

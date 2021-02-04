@@ -14,7 +14,7 @@ import staticRoutes from "@/router/staticRoutes";
  */
 function hasPermission(roles, route) {
   //解决roles为空问题
-  if (!route.meta.roles) {
+  if (!route.meta.roles && !route.auth) {
     route.meta.roles = [];
   }
   //解决roles为空问题
@@ -61,6 +61,8 @@ export default {
   },
   mutations: {
     SET_ROUTES: (state, routes) => {
+      // const routeArr = routes.filter(v => !v.auth && v);
+      // console.log(routes, routeArr);
       state.addRoutes = routes;
       state.routes = staticRoutes.concat(routes);
       // console.log(state.routes.map(v => v.path));

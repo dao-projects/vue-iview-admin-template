@@ -3,6 +3,7 @@
     <Layout>
       <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
         <DSider />
+        <div slot="trigger"></div>
       </Sider>
       <Layout>
         <DAppMain />

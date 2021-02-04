@@ -1,17 +1,30 @@
 <template>
   <fragment>
-    <Header class="layout-header-bar">嘻嘻嘻</Header>
+    <Header class="layout-header-bar"><Breadcrumbs /></Header>
     <Content :style="{ margin: '20px', background: '#fff', minHeight: '220px' }">
-      <router-view></router-view>
+      <transition name="fade-transform" mode="out-in">
+        <keep-alive :include="cachedViews">
+          <router-view :key="key" />
+        </keep-alive>
+      </transition>
     </Content>
   </fragment>
 </template>
 
 <script>
+import Breadcrumbs from "@/layout/components/Breadcrumbs";
 export default {
   name: "DAppMain",
-  created() {
-    console.log(this.$route);
+  computed: {
+    cachedViews() {
+      return this.$store.state.tagsView.cachedViews;
+    },
+    key() {
+      return this.$route.path;
+    }
+  },
+  components: {
+    Breadcrumbs
   }
 };
 </script>

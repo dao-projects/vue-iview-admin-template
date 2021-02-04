@@ -1,19 +1,12 @@
 /**
  * 异步（动态）挂载的路由，根据权限展示
  */
+import { Layout, auth } from "./config";
 //导入动态模块
-// import user from "./modules/user";
+import user from "./modules/user";
+import ka from "./modules/ka";
+import tt from "./modules/tt";
 
-/* Layout */
-import Layout from "@/layout/index";
-// 授权管理
-const auth = {
-  admin: ["admin", "manage", "user", "editor", "delete"], //超级管理员
-  manage: ["manage", "user", "editor", "delete"], //平台管理员
-  user: ["user", "editor", "delete"], //平台管理员（部分限制）
-  delete: ["editor", "delete"], //增加删除修改权限
-  editor: ["editor"] //编辑权限
-};
 // 导出动态路由
 export default [
   {
@@ -21,7 +14,7 @@ export default [
     component: Layout,
     redirect: "/dashboard",
     meta: {
-      title: "看板",
+      title: "Dashboard",
       roles: auth["admin"]
     },
     children: [
@@ -30,71 +23,19 @@ export default [
         component: () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard"),
         name: "Dashboard",
         meta: { title: "Dashboard", icon: "dashboard", affix: true, noCache: true, roles: auth["admin"] }
-      }
-    ]
-  },
-  {
-    path: "/user",
-    component: Layout,
-    redirect: "/user/index",
-    meta: { title: "用户管理", roles: auth["admin"], icon: "ios-analytics" },
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/user/index"),
-        name: "user",
-        meta: { title: "用户管理", roles: ["admin", "super_editor"] }
       },
       {
-        path: "a",
-        component: () => import("@/views/user/a"),
-        name: "a",
-        meta: { title: "用户管理-a", roles: ["admin", "super_editor"] }
-      },
-      {
-        path: "b",
-        component: () => import("@/views/user/b"),
-        name: "b",
-        meta: { title: "用户管理-b", roles: ["admin", "super_editor"] }
+        path: "dashboard/note",
+        component: () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/note"),
+        name: "note",
+        meta: { title: "笔记", icon: "dashboard", affix: true, noCache: true, roles: auth["admin"] }
       }
     ]
   },
-  {
-    path: "/ka",
-    component: Layout,
-    redirect: "/ka/index",
-    meta: { title: "卡卡", roles: auth["admin"], icon: "ios-analytics" },
-    children: [
-      {
-        path: "index",
-        component: () => import("@/views/ka/index"),
-        name: "ka",
-        meta: { title: "卡机d", icon: "dashboard", roles: ["admin", "super_editor"] }
-      }
-    ]
-  },
-  // ...user,
-  // {
-  //   path: "/",
-  //   name: "Home",
-  //   component: () => import(/* webpackChunkName: "home" */ "@/views/Home"),
-  //   meta: {
-  //     title: "首页",
-  //     roles: ["admin", "super_editor"] // 页面需要的权限
-  //   }
-  // },
-  // {
-  //   path: "/dashboard",
-  //   name: "Dashboard",
-  //   component: () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/index"),
-  //   meta: {
-  //     title: "面板",
-  //     icon: "ios-analytics",
-  //     // roles: []
-  //     roles: ["admin", "super_editor"]
-  //   }
-  // },
-
+  ...tt,
+  ...ka,
+  ...user,
+  // { path: "/", name: "Home", component: () => import(/* webpackChunkName: "home" */ "@/views/Home"), meta: { affix: true, noCache: true, title: "首页",  icon: "ios-analytics",  roles: ["admin", "super_editor"] // 页面需要的权限 }},
   //空白页面跳转
-  { path: "*", redirect: "/error", hidden: true, meta: { title: "Not page 404" } }
+  { path: "*", redirect: "/error", hidden: true, auth: "NO", meta: { title: "Not page 404" } }
 ];

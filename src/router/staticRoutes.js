@@ -5,11 +5,11 @@
  */
 
 //导入静态模块
-import ka from "./modules/ka";
+// import ka from "./modules/ka";
 
 // 导出静态路由
 export default [
-  ...ka,
+  // ...ka,
   {
     hidden: true,
     path: "/login",
