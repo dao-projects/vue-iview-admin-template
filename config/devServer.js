@@ -1,4 +1,4 @@
-const VUE_APP_BASE_API = process.env.VUE_APP_BASE_API;
+const VUE_APP_PUBLIC_PATH = process.env.VUE_APP_PUBLIC_PATH;
 module.exports = {
   disableHostCheck: true,
   open: true,
@@ -8,10 +8,14 @@ module.exports = {
   // Mock数据
   before: require("../mock/mock-server.js"),
   proxy: {
-    [VUE_APP_BASE_API]: {
+    // "/": {
+    //   target: process.env.VUE_APP_BASE_URL,
+    //   changeOrigin: true
+    // },
+    [VUE_APP_PUBLIC_PATH]: {
       target: "http://localhost:6789",
       changeOrigin: true,
-      pathRewrite: { ["^" + VUE_APP_BASE_API]: "/" }
+      pathRewrite: { ["^" + VUE_APP_PUBLIC_PATH]: "/" }
     },
     "/new": {
       target: "https://swxyy.guizhou.chinatax.gov.cn",

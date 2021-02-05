@@ -6,7 +6,7 @@ import axios from "axios";
  *    axios.defaults.timeout = 8000;
  *    axios.defaults.headers["zd"] = "2";
  *    axios.create({
- *          baseURL: process.env.BASE_URL,
+ *          baseURL: process.env.VUE_APP_BASE_URL,
  *          withCredentials: true,
  *          timeout: 5000,
  *          headers: {
@@ -16,7 +16,7 @@ import axios from "axios";
  *    })
  */
 const service = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: process.env.VUE_APP_BASE_URL,
   timeout: 5000
 });
 /**

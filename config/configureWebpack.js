@@ -1,15 +1,20 @@
 const path = require("path");
 const resolve = dir => path.join(__dirname, dir);
-//判断是否是生产环境
-const isPro = process.env.NODE_ENV === "production";
+const terserPlugin = require("terser-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
+const cdnDependencies = require("./cdn");
+// CDN 相关
+const isCDN = process.env.VUE_APP_CDN === "ON";
 // 打包模块过滤配置
-const externals = {
-  vue: "Vue",
-  vuex: "Vuex",
-  axios: "axios",
-  "vue-router": "VueRouter",
-  "view-design": "iview"
-};
+// { name: "vue-router",library: "VueRouter"} （例子：外面使用import VueRouter from "vue-router";）
+// const externals = {vue: "Vue",vuex: "Vuex",axios: "axios","vue-router": "VueRouter","view-design": "iview"};
+const externals = {};
+cdnDependencies.forEach(pkg => {
+  externals[pkg.name] = pkg.library;
+});
+// gzip 相关
+const isGZIP = process.env.VUE_APP_GZIP === "ON";
+
 //配置别名
 const alias = {
   assets: resolve("src/assets"),
@@ -17,49 +22,41 @@ const alias = {
 };
 
 module.exports = config => {
-  // console.log(process.env.NODE_ENV, ":", config);
-  if (isPro) {
-    // 不会被打包的库
-    Object.assign(config, {
-      externals: externals
-    });
-    // 为生产环境修改配置...
-    // console.log("production:", config);
-  } else {
-    // 为开发环境修改配置...
-    // console.log("development:", config);
+  config.resolve.modules = ["node_modules"];
+  if (isCDN) {
+    config.externals = externals;
   }
-  Object.assign(config, {
-    resolve: {
-      ...config.resolve,
-      extensions: [...config.resolve.extensions, ".less"],
-      alias: {
-        ...config.resolve.alias,
-        ...alias
-      }
-    }
-  });
-  // config.resolve.alias
-  //   .set("assets", resolve("src/assets"))
-  //   .set("styles", resolve("src/styles"))
-  //   .set("components", resolve("src/components"))
-  //   .set("views", resolve("src/views"))
-  //   .set("utils", resolve("src/utils"));
-  //别名配置
-  // Object.assign(config, {
-  //   resolve: {
-  //     extensions: [".js", ".vue", ".json", ".less"],
-  //     alias: {
-  //       vue$: "vue/dist/vue.js",
-  //       // "@": resolve("src"),
-  //       img: resolve("src/assets/images"),
-  //       font: resolve("src/assets/font"),
-  //       comps: resolve("src/components"),
-  //       assets: resolve("src/assets"),
-  //       styles: resolve("src/styles"),
-  //       utils: resolve("src/utils"),
-  //       views: resolve("src/views")
-  //     }
-  //   }
-  // });
+  config.optimization = {
+    minimizer: [
+      new terserPlugin({
+        terserOptions: {
+          ecma: undefined,
+          warnings: false,
+          parse: {},
+          compress: {
+            warnings: false,
+            drop_console: true,
+            // drop_debugger: true,
+            drop_debugger: false,
+            pure_funcs: ["console.log"] //移除console.log
+          }
+        }
+      })
+    ]
+  };
+  if (isGZIP) {
+    return {
+      plugins: [
+        new CompressionPlugin({
+          algorithm: "gzip",
+          test: /\.(js|css)$/, // 匹配文件名
+          threshold: 10240, // 对超过10k的数据压缩
+          deleteOriginalAssets: false, // 不删除源文件
+          minRatio: 0.8 // 压缩比
+        })
+      ]
+    };
+  }
+  config.resolve.extensions.push(".less");
+  config.resolve.alias = { ...config.resolve.alias, ...alias };
 };

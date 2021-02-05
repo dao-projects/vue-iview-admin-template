@@ -1,10 +1,10 @@
 // 项目部署路径的BASE_URL
-const VUE_APP_BASE_API = process.env.VUE_APP_BASE_API;
-// console.log(VUE_APP_BASE_API);
+const VUE_APP_PUBLIC_PATH = process.env.VUE_APP_PUBLIC_PATH;
+// console.log(VUE_APP_PUBLIC_PATH);
 
 module.exports = {
   productionSourceMap: false,
-  publicPath: VUE_APP_BASE_API,
+  publicPath: VUE_APP_PUBLIC_PATH,
   //开发环境配置
   devServer: require("./config/devServer"),
   //webpack配置
