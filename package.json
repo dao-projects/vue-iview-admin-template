@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "build:deploy": "vue-cli-service build --mode deploy",
     "build:staging": "vue-cli-service build --mode staging",
+    "build:test": "vue-cli-service build --mode test",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
@@ -14,6 +15,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.4",
+    "qs": "^6.9.6",
     "view-design": "^4.5.0-beta.2",
     "vue": "^2.6.11",
     "vue-fragment": "^1.5.1",
